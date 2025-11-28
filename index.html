@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="color-scheme" content="dark light" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Copilot UI — Advanced Multi-View (Fixed)</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="app-frame">
+    <!-- Sidebar -->
+    <aside class="sidebar glass" aria-label="Primary">
+      <div class="sidebar-top">
+        <a class="brand" href="#" aria-label="Home">
+          <svg viewBox="0 0 24 24" class="icon-xxl">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M8 12l2.5 2.5L16 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="brand-text">Copilot</span>
+        </a>
+
+        <nav class="menu" role="navigation">
+          <button class="menu-item" data-view="discover">
+            <span class="menu-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.5 7H22l-5.5 4.5L18 22l-6-3.5L6 22l1.5-8.5L2 9h6.5L12 2z"/></svg>
+            </span>
+            <span class="menu-text">Discover</span>
+          </button>
+          <button class="menu-item" data-view="imagine">
+            <span class="menu-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 21s-6-4.35-6-9a6 6 0 1 1 12 0c0 4.65-6 9-6 9z"/></svg>
+            </span>
+            <span class="menu-text">Imagine New</span>
+          </button>
+          <button class="menu-item" data-view="library">
+            <span class="menu-icon">
+              <svg viewBox="0 0 24 24"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h8" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </span>
+            <span class="menu-text">Library</span>
+          </button>
+          <button class="menu-item" data-view="labs">
+            <span class="menu-icon">
+              <svg viewBox="0 0 24 24"><path d="M6 20h12M10 4l4 0M8 8l8 0M7 12l10 0M9 16l6 0"/></svg>
+            </span>
+            <span class="menu-text">Labs</span>
+          </button>
+          <!-- Conversations removed from sidebar (appears dynamically later) -->
+          <button class="menu-item" data-view="news">
+            <span class="menu-icon">
+              <svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><path d="M4 10h16M8 14h8" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </span>
+            <span class="menu-text">News</span>
+          </button>
+          <button class="menu-item is-active" data-view="trending" aria-current="page">
+            <span class="menu-icon">
+              <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 18 0A9 9 0 0 0 3 12zm3 0h12"/></svg>
+            </span>
+            <span class="menu-text">Trending</span>
+          </button>
+          <button class="menu-item" data-view="feed">
+            <span class="menu-icon">
+              <svg viewBox="0 0 24 24"><path d="M4 5h16v14H4z"/><path d="M7 9h10M7 13h8M7 17h6" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </span>
+            <span class="menu-text">Feed</span>
+          </button>
+          <!-- Settings removed from sidebar -->
+        </nav>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <header class="top glass">
+        <div class="top-left">
+          <button class="home-btn" aria-label="Home">
+            <svg viewBox="0 0 24 24" class="icon-lg"><path d="M3 11l9-8 9 8v10h-6v-6H9v6H3z"/></svg>
+          </button>
+        </div>
+        <nav class="top-right">
+          <a href="#" class="top-link">About</a>
+          <a href="#" class="top-link">Pricing</a>
+          <a href="#" class="top-link">Get Started</a>
+          <!-- Single settings icon (top right) -->
+          <button class="top-settings-btn" aria-label="Settings">
+            <svg viewBox="0 0 24 24" class="icon-lg">
+              <path d="M12 8a4 4 0 1 0 .001 8.001A4 4 0 0 0 12 8zm9 4l-2.1.3a7.2 7.2 0 0 1-.9 2.2l1.3 1.7-2.5 2.5-1.7-1.3a7.2 7.2 0 0 1-2.2.9L12 21l-2.3-.3a7.2 7.2 0 0 1-2.2-.9L5.8 21l-2.5-2.5 1.3-1.7a7.2 7.2 0 0 1-.9-2.2L1 12l2.3-.3a7.2 7.2 0 0 1 .9-2.2L2.9 7.8 5.4 5.3l1.7 1.3a7.2 7.2 0 0 1 2.2-.9L12 3l2.3.3c.8.2 1.5.5 2.2.9l1.7-1.3 2.5 2.5-1.3 1.7c.4.7.7 1.4.9 2.2L21 12z"/>
+            </svg>
+          </button>
+          <!-- Conversations chip appears only after chat/search -->
+          <button class="top-chip hidden" id="conversationsChip">Conversations</button>
+        </nav>
+      </header>
+
+      <!-- Search (hidden by default; opens only on Discover) -->
+      <section class="search glass hidden" aria-label="Search">
+        <div class="search-wrap">
+          <input type="text" class="search-input" placeholder="Hi, what can I help with you" aria-label="Search" />
+          <div class="suggestions" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- Discover -->
+      <section id="discover" class="view glass">
+        <h2>Discover</h2>
+        <div class="grid-3">
+          <article class="card glass hero">
+            <div class="hero-kicker">Editor’s choice</div>
+            <h3>Design systems that scale emotion</h3>
+            <p>Patterns for visual hierarchy, color theory, and crafted motion.</p>
+            <button class="btn-primary">Explore</button>
+          </article>
+          <article class="card glass"><h3>Curations</h3><p>Hand‑picked topics across tech, art, finance.</p></article>
+          <article class="card glass"><h3>Spotlights</h3><p>Creators and products making waves.</p></article>
+        </div>
+        <div class="ads-row">
+          <div class="ad-card glass"><span class="ad-label">Sponsored</span><h4>Pro UI Kit</h4><p>Ship faster with polished components.</p></div>
+          <div class="ad-card glass"><span class="ad-label">Ad</span><h4>Cloud Credits</h4><p>Scale workloads affordably.</p></div>
+        </div>
+      </section>
+
+      <!-- Imagine -->
+      <section id="imagine" class="view glass">
+        <h2>Imagine new</h2>
+        <div class="grid-2">
+          <article class="card glass">
+            <h3>Prompt canvas</h3>
+            <div class="prompt-grid">
+              <input class="prompt-input" placeholder="Describe your idea…" />
+              <button class="btn-primary" id="generateBtn">Generate</button>
+            </div>
+            <div class="prompt-result"></div>
+          </article>
+          <article class="card glass">
+            <h3>Idea board</h3>
+            <ul class="idea-list"></ul>
+            <div class="idea-controls">
+              <input class="idea-input" placeholder="New idea…" />
+              <button class="btn-secondary" id="addIdeaBtn">Add</button>
+            </div>
+          </article>
+        </div>
+        <div class="ads-row">
+          <div class="ad-card glass"><span class="ad-label">Sponsored</span><h4>Vector Assets</h4><p>Icons in heavy blues for brand fit.</p></div>
+        </div>
+      </section>
+
+      <!-- Library -->
+      <section id="library" class="view glass">
+        <h2>Library</h2>
+        <div class="toolbar">
+          <input class="filter-input" placeholder="Filter…" />
+          <select class="sort-select">
+            <option value="recent">Recent</option>
+            <option value="alpha">A–Z</option>
+          </select>
+        </div>
+        <div class="grid-3 library-grid"></div>
+        <div class="ads-row">
+          <div class="ad-card glass"><span class="ad-label">Ad</span><h4>Backup Storage</h4><p>Keep your assets safe.</p></div>
+        </div>
+      </section>
+
+      <!-- Labs -->
+      <section id="labs" class="view glass">
+        <h2>Labs</h2>
+        <div class="grid-3">
+          <article class="card glass"><h3>Experimental UI</h3><p>Try immersive panes and micro‑interactions.</p><button class="btn-secondary">Enable</button></article>
+          <article class="card glass"><h3>Feature flags</h3><p>Opt‑in to new features.</p><button class="btn-secondary">Manage</button></article>
+          <article class="card glass"><h3>Beta feedback</h3><p>Share detailed insights.</p><button class="btn-secondary">Submit</button></article>
+        </div>
+        <div class="ads-row"><div class="ad-card glass"><span class="ad-label">Sponsored</span><h4>Test Suite</h4><p>Automate pixel checks.</p></div></div>
+      </section>
+
+      <!-- News -->
+      <section id="news" class="view glass">
+        <h2>News</h2>
+        <div class="tabs">
+          <button class="tab-btn is-active" data-tab="world">World</button>
+          <button class="tab-btn" data-tab="stocks">Stock news</button>
+          <button class="tab-btn" data-tab="students">For students</button>
+        </div>
+        <div class="tab-content">
+          <div class="tab-panel is-active" id="tab-world">
+            <div class="grid-3">
+              <article class="card glass card-news"><div class="news-source">Reuters</div><h4 class="news-title">Global markets steady ahead of data</h4><div class="news-time">36m ago</div></article>
+              <article class="card glass card-news"><div class="news-source">BBC</div><h4 class="news-title">Weather extremes hit multiple regions</h4><div class="news-time">2h ago</div></article>
+              <article class="card glass card-news"><div class="news-source">Al Jazeera</div><h4 class="news-title">Policy shifts reshape trade corridors</h4><div class="news-time">1h ago</div></article>
+            </div>
+            <div class="ads-row"><div class="ad-card glass"><span class="ad-label">Sponsored</span><h4>Global ETF</h4><p>Diversify worldwide.</p></div></div>
+          </div>
+          <div class="tab-panel" id="tab-stocks">
+            <div class="grid-2">
+              <article class="card glass card-stock">
+                <div class="card-head"><span class="label">Sponsored</span></div>
+                <h3 class="card-title">Microsoft Corporation</h3>
+                <div class="card-meta"><span class="pos">+0.45%</span><span class="sep">|</span><span class="days">11D</span></div>
+                <div class="card-graph"><svg viewBox="0 0 200 64" preserveAspectRatio="none"><path d="M0 48 L25 50 L50 46 L75 40 L100 44 L125 36 L150 30 L175 35 L200 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+              </article>
+              <article class="card glass card-stock">
+                <div class="card-head"><span class="label">Sponsored</span><span class="badge">GO 51%</span></div>
+                <h3 class="card-title">Alphabet Inc.</h3>
+                <div class="card-meta"><span class="pos">+1.73%</span><span class="sep">|</span><span class="days">11D</span></div>
+                <div class="card-graph"><svg viewBox="0 0 200 64" preserveAspectRatio="none"><path d="M0 52 L25 48 L50 42 L75 38 L100 40 L125 34 L150 28 L175 33 L200 22" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+              </article>
+            </div>
+            <div class="ads-row"><div class="ad-card glass"><span class="ad-label">Ad</span><h4>Broker Deals</h4><p>Zero‑commission trials.</p></div></div>
+          </div>
+          <div class="tab-panel" id="tab-students">
+            <div class="grid-3">
+              <article class="card glass card-news"><div class="news-source">Campus Wire</div><h4 class="news-title">Scholarship deadlines near</h4><div class="news-time">Today</div></article>
+              <article class="card glass card-news"><div class="news-source">Exam Watch</div><h4 class="news-title">Prep strategies that work</h4><div class="news-time">3h ago</div></article>
+              <article class="card glass card-news"><div class="news-source">Career Hub</div><h4 class="news-title">Internships in tech</h4><div class="news-time">1h ago</div></article>
+            </div>
+            <div class="ads-row"><div class="ad-card glass"><span class="ad-label">Sponsored</span><h4>Prep Suite</h4><p>Mock tests and analytics.</p></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Trending (default active) -->
+      <section id="trending" class="view glass active">
+        <h2>Trending</h2>
+        <div class="grid-2">
+          <article class="card glass card-stock">
+            <div class="card-head"><span class="label">Sponsored</span></div>
+            <h3 class="card-title">Microsoft Corporation</h3>
+            <div class="card-meta"><span class="pos">+0.45%</span><span class="sep">|</span><span class="days">11D</span></div>
+            <div class="card-graph"><svg viewBox="0 0 200 64" preserveAspectRatio="none"><path d="M0 48 L25 50 L50 46 L75 40 L100 44 L125 36 L150 30 L175 35 L200 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+          </article>
+          <article class="card glass card-stock">
+            <div class="card-head"><span class="label">Sponsored</span><span class="badge">GO 51%</span></div>
+            <h3 class="card-title">Alphabet Inc.</h3>
+            <div class="card-meta"><span class="pos">+1.73%</span><span class="sep">|</span><span class="days">11D</span></div>
+            <div class="card-graph"><svg viewBox="0 0 200 64" preserveAspectRatio="none"><path d="M0 52 L25 48 L50 42 L75 38 L100 40 L125 34 L150 28 L175 33 L200 22" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+          </article>
+        </div>
+
+        <div class="grid-3">
+          <article class="card glass card-news"><div class="news-source">Forbes</div><h4 class="news-title">The Importance Of The Inflation Reduction Act…</h4><div class="news-time">4 hours ago</div></article>
+          <article class="card glass card-news"><div class="news-source">The New York Times</div><h4 class="news-title">Experts Predict a ‘Very Messy’ Decision</h4><div class="news-time">1 hour ago</div></article>
+          <article class="card glass card-feed">
+            <div class="feed-head"><div class="avatar" title="Jennifer"></div><div class="feed-meta"><div class="feed-name">Jennifer</div><div class="feed-time">2 hours ago</div></div><span class="label label-right">Sponsored</span></div>
+            <p class="feed-text">I hesitate to invest in the market right now as it has soared.</p>
+            <div class="card-graph"><svg viewBox="0 0 200 64" preserveAspectRatio="none"><path d="M0 50 L25 52 L50 46 L75 42 L100 44 L125 38 L150 32 L175 36 L200 26" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+          </article>
+        </div>
+
+        <div class="grid-3">
+          <article class="card glass"><h3>Youth Focus</h3><p>Campus trends, creator spotlights.</p></article>
+          <article class="card glass"><h3>Fun</h3><p>Memes, challenges, weekend picks.</p></article>
+          <article class="card glass"><h3>New Innovations</h3><p>AI tools, product launches, patents.</p></article>
+        </div>
+
+        <div class="ads-row">
+          <div class="ad-card glass"><span class="ad-label">Ad</span><h4>Tech Deals</h4><p>Save on hardware.</p></div>
+          <div class="ad-card glass"><span class="ad-label">Sponsored</span><h4>Travel Partner</h4><p>Exclusive discounts.</p></div>
+          <div class="banner glass"><strong>Sponsored Banner</strong> — premium placement</div>
+        </div>
+      </section>
+
+      <!-- Feed -->
+      <section id="feed" class="view glass">
+        <h2>Feed</h2>
+        <div class="grid-2">
+          <article class="card glass"><h3>Community Post</h3><p>Latest from your network.</p></article>
+          <article class="card glass"><h3>Sponsored</h3><p>Partner updates and offers.</p></article>
+        </div>
+        <div class="ads-row"><div class="ad-card glass"><span class="ad-label">Ad</span><h4>Creator Tools</h4><p>Boost your content.</p></div><div class="ad-card glass"><span class="ad-label">Sponsored</span><h4>Brand Collab</h4><p>Apply for partnerships.</p></div></div>
+      </section>
+
+      <!-- Conversations (hidden until user chats/searches) -->
+      <section id="conversations" class="view glass hidden">
+        <h2>Conversations</h2>
+        <div class="conv-wrap">
+          <div class="conv-list"></div>
+          <div class="conv-input-row">
+            <input class="conv-input" placeholder="Type a message…" />
+            <button class="btn-primary" id="sendMsgBtn">Send</button>
+          </div>
+        </div>
+        <div class="ads-row"><div class="ad-card glass"><span class="ad-label">Ad</span><h4>Pro CRM</h4><p>Track customer chats.</p></div></div>
+      </section>
+
+      <!-- Settings (opened from top right only) -->
+      <section id="settings" class="view glass hidden">
+        <h2>Settings</h2>
+        <div class="grid-2">
+          <form class="card glass settings-form" id="accountForm">
+            <h3>Account details</h3>
+            <label class="field"><span>Name</span><input type="text" id="name" placeholder="Your name" /></label>
+            <label class="field"><span>Email</span><input type="email" id="email" placeholder="you@example.com" /></label>
+            <button type="submit" class="btn-primary">Save</button>
+          </form>
+
+          <div class="card glass">
+            <h3>Background</h3>
+            <p>Use a custom scenic image.</p>
+            <label class="file"><input type="file" id="bgFile" accept="image/*" /><span class="file-cta">Upload background</span></label>
+            <div class="hint">PNG/JPG, large scenic recommended.</div>
+
+            <div class="theme-toggle">
+              <label><input type="checkbox" id="themeToggle" /> Light theme</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-1"><button class="btn-danger" id="logoutBtn">Log out</button></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
